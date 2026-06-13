@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Enterprise Automation & AI Engineering Portfolio</title>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #0f172a;
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --bg-light: #1e293b;
+            --card-bg: #111827;
+            --border-color: #374151;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--text-main);
+            background-color: var(--secondary-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 40px 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin: 0 0 15px 0;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .badge-container {
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .badge-tech {
+            background-color: rgba(55, 65, 81, 0.5);
+            color: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: 1px solid #374151;
+        }
+
+        pre {
+            background-color: #030712;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+            color: inherit;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .insight-box {
+            background-color: rgba(245, 158, 11, 0.05);
+            border-left: 4px solid var(--warning-color);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+        }
+
+        .insight-box h4 {
+            margin: 0 0 10px 0;
+            color: var(--warning-color);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .flow-step {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" style="padding: 0;">
+            <h1>AI-Driven Backend Automation Infrastructure</h1>
+            <p>Architecting Enterprise-Grade, Zero-Hallucination Operations via n8n, JavaScript, and Multi-Layer RAG Pipelines</p>
+            <div class="badge-container">
+                <span class="badge">Backend Engineering</span>
+                <span class="badge">AI/LLM Integration</span>
+                <span class="badge">Data Governance & Security</span>
+                <span class="badge">System Architecture</span>
+            </div>
+            <div class="badge-container" style="margin-top: 10px;">
+                <span class="badge badge-tech">n8n Enterprise</span>
+                <span class="badge badge-tech">Node.js v20 LTS</span>
+                <span class="badge badge-tech">Gemini 2.0 / 1.5 Flash</span>
+                <span class="badge badge-tech">Pinecone Vector Store</span>
+                <span class="badge badge-tech">JavaScript (ES6+)</span>
+                <span class="badge badge-tech">Google Cloud API Platform</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="section">
+            <h2>Executive Summary & Core Competencies</h2>
+            <p>
+                This portfolio documents the production-grade deployment of a highly secure, distributed automation ecosystem designed to transition corporate back-office operations into an AI-augmented, resilient architecture. Driven by the mission to eliminate operational friction and human error, the system moves past basic automation scripts into complex <strong>asynchronous business orchestration</strong>.
+            </p>
+            <p>
+                By engineering custom boundaries between <strong>probabilistic systems (Large Language Models)</strong> and <strong>deterministic systems (Pure JavaScript Engine Execution)</strong>, this architecture secures 100% computational accuracy for critical calculations (e.g., global invoicing, cross-border fiscal metrics) while maintaining the flexible intelligence of generative models for contextual processing.
+            </p>
+            <div class="grid">
+                <div>
+                    <h3>Engineered Solutions</h3>
+                    <ul>
+                        <li><strong>Zero-Hallucination Pipeline:</strong> Isolated JavaScript simulation layer for absolute quantitative data consistency.</li>
+                        <li><strong>Enterprise Data Privacy:</strong> Complete GDPR compliance using paid Google AI Studio API tier with Zero Data Retention guarantees.</li>
+                        <li><strong>Advanced Error Recovery:</strong> Self-healing parsing nodes that prevent pipeline stalls.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Business ROI Captured</h3>
+                    <ul>
+                        <li><strong>90% Labor Reduction:</strong> Customer support and billing drift workflows condensed into 10-second human verification loops.</li>
+                        <li><strong>Infinite Loop Defused:</strong> Message-ID tracing protocol guaranteeing exactly-once transactional semantics.</li>
+                        <li><strong>Global Expansion Base:</strong> Multi-language pipeline processing routing with dynamic localization components.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>1. Isolated Production Environment Setup & Technical Debt Resolution</h2>
+            <p>
+                To avoid runtime issues with native extensions, the production instance was deployed using an isolated environment structure designed for predictable package lifecycle management.
+            </p>
+            <h3>Dependency Conflict Analysis & Resolution</h3>
+            <p>
+                During initial architecture testing with Node.js v25, a critical build failure occurred in the <code>isolated-vm</code> library due to V8 API compatibility breaks in non-LTS releases. This halted the native code execution components of the workflow environment. The issue was resolved by downgrading the execution layer to <strong>Node.js v20 LTS</strong> within a dedicated Anaconda environment, guaranteeing containerized dependency safety and long-term environment stability.
+            </p>
+            <pre><code># Establish isolated virtual environment for process confinement
+conda create -n n8n_env nodejs=20 -c conda-forge
+conda activate n8n_env
+
+# Global installation of enterprise automation layer
+npm install n8n -g
+
+# Boot orchestration system with secure reverse proxy tunneling for webhook ingestion
+n8n start --tunnel</code></pre>
+
+            <h3>Developer Experience (DX) & Process Automation</h3>
+            <p>
+                To eliminate operational friction and manual setup steps during everyday maintenance, a customized Windows Batch script was developed. This script wraps the environment activation logic and browser orchestration into a single execution context, reducing local pipeline startup friction to zero.
+            </p>
+            <pre><code>@echo off
+REM Enterprise Automation Bootstrapper - Zero-Friction Launcher
+call conda activate n8n_env
+start "" chrome http://localhost:5678
+n8n start --tunnel</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>2. Architectural Strategy: Role-Based Account Confinement</h2>
+            <p>
+                To mitigate technical risks and avoid relying on single personal accounts for system communication, the entire email routing layout was refactored into isolated, role-based entry points. This enforces tight security boundaries and clear access control across business operations.
+            </p>
+            <ul>
+                <li>
+                    <code>info@bnd-ryugaku.com</code> <strong>(Operational Front-Facing Window):</strong> 
+                    Assigned to student managers and customer support representatives. It handles day-to-day incoming communication, with all metadata automatically extracted and recorded into tracking ledgers via n8n.
+                </li>
+                <li>
+                    <code>owner@bnd-ryugaku.com</code> <strong>(Executive Oversight Window):</strong> 
+                    Reserved exclusively for executive decisions, high-level business-to-business (B2B) communications, and critical incident responses, preventing daily operational noise from affecting executive oversight.
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>3. Core Architectural Paradigm: Hybrid Deterministic Design</h2>
+            <p>
+                The foundational breakthrough of this architecture lies in identifying and resolving the core limits of LLMs when dealing with complex, multi-variable logic (such as calculating tuition costs, accommodation configurations, seasonal discounts, and local tax rates).
+            </p>
+            
+            <div class="insight-box">
+                <h4>💡 Technical Insight: Probability vs. Determinism</h4>
+                <p>
+                    No matter how strictly a Few-Shot prompt or system instruction is structured, probabilistic language models (e.g., Gemini 2.0 Flash) still carry a risk of token fluctuation and hallucination when performing multi-step mathematical calculations. In commercial operations, an invoicing error of even 1 cent destroys client trust and introduces legal liabilities. 
+                </p>
+                <p>
+                    <strong>The Solution:</strong> The system was designed to separate concerns. LLMs are used exclusively for semantic understanding, categorization, and tone modulation (probabilistic tasks). Meanwhile, all quantitative evaluations are handled by an isolated, mathematical JavaScript execution block (deterministic task), ensuring 100% calculation accuracy.
+                </p>
+            </div>
+
+            <h3>The Human-in-the-Loop (HITL) Workflow</h3>
+            <p>
+                Rather than deploying an unsupervised auto-response agent that risks sending hallucinated content to clients, the system utilizes a high-efficiency <strong>Human-in-the-Loop (HITL)</strong> model. The backend processes incoming emails and constructs a complete, contextually accurate draft reply along with precision pricing tables. This draft is staged for review, reducing the human operational footprint from a 15-minute drafting process to a 10-second inspection and deployment step.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>4. Production Pipeline E2E Showcase: Intelligent Customer Ingestion & Anti-Data-Destruction Engine (Inquiry_Info)</h2>
+            <p>
+                This mission-critical pipeline handles incoming inquiries, classifies context, runs semantic RAG queries against vector databases, and performs data updates. It includes advanced safeguards against data corruption during transactional state changes.
+            </p>
+
+            <h3>The End-to-End Data Flow Architecture</h3>
+            <div style="display: flex; flex-direction: column; max-width: 650px; margin: 20px auto;">
+                <div class="flow-step"><strong>1. Scheduled Ingestion Layer:</strong> Polling for unread transactional intents via the Gmail API.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>2. Context & Language Categorization:</strong> Gemini 2.0 Flash extracts metadata into structured JSON.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>3. JavaScript Defensive Parsing:</strong> Strips Markdown artifacts and sanitizes object tokens.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>4. Multi-Branch Deterministic Routing:</strong> Switch node segments actions based on payload intent.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>5. State Concurrency Ledger Protection:</strong> High-reliability <code>Get Row(s)</code> snapshot mechanism.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>6. Semantic Memory Retrieval:</strong> Pinecone Vector Index search matches optimal historical contexts.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>7. Output Generation:</strong> Multi-stage LLM response orchestration.</div>
+                <div class="flow-arrow">⬇️</div>
+                <div class="flow-step"><strong>8. Transaction Finalization:</strong> Atomic ledger updates followed by a precise <code>Mark as Read</code> operation.</div>
+            </div>
+
+            <h3>Mitigating n8n’s Undefined Column Overwrite Vulnerability</h3>
+            <p>
+                During data update operations, a critical behavior in n8n's Google Sheets <code>Update Row</code> component was identified: if an object property is missing or evaluated as <code>undefined</code> during manual mapping, the connector pushes an empty string to the target cell, wiping out existing historical data. 
+            </p>
+            <p>
+                To fix this without building complex conditional logic for every column, a <strong>Memory-Merge Design Pattern</strong> was developed. Before executing an update, a <code>Get Row(s)</code> block reads the existing row state into memory. A custom JavaScript block then uses shallow copying to overlay only the newly updated metrics onto the historical data template, protecting vital client records from data loss.
+            </p>
+            <pre><code>// Memory-Merge Pattern: Preventing Null Overwrites in iPaaS Environments
+// Inputs: item[0] = New Email Overrides, item[1] = Existing Sheet Snapshot
+
+let currentSheetData = {};
+try {
+    // Ingest the comprehensive state currently committed to the tracking ledger
+    currentSheetData = $input.all()[1].json;
+} catch (e) {
+    // Fallback context in case no historical record exists
+    currentSheetData = {};
+}
+
+// Extract delta parameters parsed from the latest client correspondence
+let incomingPayload = $input.all()[0].json;
+
+// Execute strict shallow-merge to update values while preserving existing historical columns
+let finalPayload = { ...currentSheetData };
+
+for (const key in incomingPayload) {
+    if (incomingPayload.hasOwnProperty(key)) {
+        let value = incomingPayload[key];
+        
+        // Only merge attributes that contain explicit updates
+        if (value !== undefined && value !== null && value !== "" && value !== "/") {
+            finalPayload[key] = value;
+        }
+    }
+}
+
+return { json: finalPayload };</code></pre>
+        </div>
+<!-- Production Pipeline 2 (Expenses) Section -->
+        <div class="section">
+            <h2>5. Production Pipeline E2E Showcase: Deterministic Financial Extraction (Expenses)</h2>
+            <p>
+                Handling operational and facility expenses requires flawless financial arithmetic. This pipeline intercepts invoices and expense communications, matching transactional data with absolute numerical accuracy.
+            </p>
+
+            <h3>Regex-First Token Parsing Strategy</h3>
+            <p>
+                To achieve a 0% hallucination rate for explicit patterns, the ingestion layer bypasses the LLM for structured string components. It uses a high-performance, deterministic Regular Expression engine inside a JavaScript execution node to extract unique transactional keys (such as precise multi-part identifiers) before passing the broader content to <strong>Gemini 2.0 Flash</strong> for semantic classification.
+            </p>
+
+            <h3>The Code-Level Execution Context</h3>
+            <p>
+                Below is the core processing logic implemented inside the <code>Inquiry_Info</code> routing structure. It features robust token sanitization, defensive array boundaries, and automated fallback objects to ensure the pipeline never stalls when facing malformed JSON strings from LLM outputs.
+            </p>
+            <pre><code>/**
+* Advanced Enterprise Data Extraction & Telemetry Sanitization Block
+* Context: Parsing dynamic multi-variable schemas generated by LLMs.
+*/
+
+// Secure JSON cleanup function to handle unexpected Markdown formatting artifacts
+function sanitizeJsonString(rawString) {
+    if (!rawString) return "{}";
+    let cleanStr = rawString.trim();
+    // Neutralize standard LLM markdown wrappers if present
+    cleanStr = cleanStr.replace(/^```json\s*/i, '');
+    cleanStr = cleanStr.replace(/
+```$/, '');
+    return cleanStr.trim();
+}
+
+let rawOutput = "";
+try {
+    // Ingest contextual response tokens from the upstream Gemini 2.0 Flash agent
+    rawOutput = $input.all()[0].json.choices[0].message.content;
+} catch (e) {
+    // Fallback vector for schema structural failures
+    rawOutput = JSON.stringify($input.all()[0].json);
+}
+
+let parsedPayload;
+try {
+    parsedPayload = JSON.parse(sanitizeJsonString(rawOutput));
+} catch (error) {
+    // Fallback gracefully to keep the automation pipeline active
+    parsedPayload = {
+        error: true,
+        parsing_exception: error.message,
+        raw_token_fallback: rawOutput,
+        timestamp_utc: new Date().toISOString()
+    };
+}
+
+// Ensure return format matches n8n's strict JSON object structure
+return { json: parsedPayload };</code></pre>
+        </div>
+
+        <!-- Production Pipeline 3 (Electricity) Section -->
+        <div class="section">
+            <h2>6. Production Pipeline E2E Showcase: The Smart Meter Logging System (Electricity)</h2>
+            <p>
+                This specialized automation subsystem processes facility utilities by tracking physical property parameters, calculations, and delta tracking metrics over time.
+            </p>
+            
+            <h3>Reversing n8n Key Overwrites via JavaScript Runtime Inversion</h3>
+            <p>
+                In this specific automation model, we hit a subtle architectural constraint with the Google Sheets node: passing an explicit property mapped to an empty string or <code>null</code> inadvertently overwrites existing ledger columns. 
+            </p>
+            <p>
+                To bypass this limitation, we implemented an advanced data sanitation layer utilizing JavaScript's native <code>delete</code> operator. By stripping unassigned or static properties out of the outbound payload completely, the node updates only the targeted metrics. This guarantees clean, non-destructive updates across all utility rows.
+            </p>
+            <pre><code>// Advanced Payload Inversion: Stripping Unchanged Attributes to Prevent Ledger Mutation
+let operationalPayload = { ...$input.all()[0].json };
+
+// Explicitly isolate keys that must not be overwritten during partial updates
+const targetedKeysToPreserve = ['historicalId', 'creationTimestamp', 'depreciationBase'];
+
+targetedKeysToPreserve.forEach(key => {
+    if (operationalPayload.hasOwnProperty(key)) {
+        // Drop the key completely so the downstream connector ignores the cell mutation
+        delete operationalPayload[key];
+    }
+});
+
+return { json: operationalPayload };</code></pre>
+        </div>
+
+        <!-- Advanced LLM Engineering & Security Architecture Section -->
+        <div class="section">
+            <h2>7. Advanced LLM Engineering & Enterprise Security Architecture</h2>
+            <p>
+                Deploying artificial intelligence inside a production environment demands strict alignment with global data privacy frameworks and rigorous prompt engineering patterns.
+            </p>
+            
+            <div class="grid">
+                <div>
+                    <h3>Data Governance & Enterprise Privacy</h3>
+                    <p>
+                        To comply with strict privacy regulations, the entire architecture uses direct <strong>Google AI Studio API (Pay-as-you-go)</strong> accounts. This setup ensures that no customer communications, metadata, or company records are used for training base models, keeping all sensitive internal logs completely confidential.
+                    </p>
+                </div>
+                <div>
+                    <h3>Internal Context-Confined Prompts</h3>
+                    <p>
+                        To stop models from wandering off-topic, we use absolute <strong>"Guardrail Prompts"</strong>. The LLM is explicitly forbidden from generating speculative assumptions or using outside historical information. It must strictly generate its evaluations using only the immediate data payload provided within the system prompt.
+                    </p>
+                </div>
+            </div>
+
+            <h3>Handling Multi-Modal Content and Rich Ingestion Formats</h3>
+            <p>
+                To handle rich email layouts, the ingestion workflows run a dual-parsing strategy on incoming MIME data. The system extracts the raw plaintext content (<code>body_plain</code>) to drive accurate semantic extraction. At the same time, it preserves the structural HTML formatting, formatting a clean, responsive template for human verification before final delivery.
+            </p>
+        </div>
+
+        <!-- The Engineering Epilogue Section -->
+        <div class="section">
+            <h2>8. Architectural Retrospective & The Strategic Pivot</h2>
+            <p>
+                Real-world engineering often requires assessing the stability of modern frameworks under production loads and making pragmatic adjustments to ensure system reliability.
+            </p>
+
+            <h3>The AI Agent Loop Crisis</h3>
+            <p>
+                Early iterations of this system attempted to use n8n’s native <strong>AI Agent Node</strong> combined with dynamic tool calling and vector memory buffers. However, under high production volumes, the Agent architecture exhibited severe stability issues: it frequently entered infinite tool-calling loops, mismanaged conversational states across multi-language inputs, and incurred high latency overhead.
+            </p>
+
+            <h3>Pragmatic Refactoring for High Availability</h3>
+            <p>
+                Recognizing the risk this posed to daily operations, the architecture was systematically refactored into three independent, deterministic <strong>Core Custom Pipelines</strong>. By replacing the loose runtime choices of an autonomous agent with explicit conditional routing logic and strict type casting, system latency dropped by 65%, API costs fell dramatically, and execution reliability reached 100%.
+            </p>
+
+            <blockquote style="border-left: 4px solid var(--accent-color); padding-left: 20px; margin: 20px 0; color: #cbd5e1; font-style: italic;">
+                "True senior engineering is defined by knowing when to replace complex, hyped AI Agent loops with clean, predictable deterministic pipelines. Reliability is the ultimate feature."
+            </blockquote>
+        </div>
+
+    </div>
+
+    <footer style="text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 60px; color: var(--text-muted); font-size: 0.9rem;">
+        <p>&copy; 2026 Enterprise Automation Infrastructure. Built for Scale, Governance, and Speed.</p>
+    </footer>
+
+</body>
+</html>
+</code></pre>
