@@ -17,6 +17,8 @@
             --card-bg: #111827;
             --border-color: #374151;
             --warning-color: #f59e0b;
+            --lang-btn-bg: #334155;
+            --lang-btn-hover: #475569;
         }
 
         body {
@@ -78,6 +80,32 @@
             border: 1px solid var(--border-color);
         }
 
+        /* Language Switcher Styling */
+        .language-switcher {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--lang-btn-bg);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .lang-btn:hover {
+            background-color: var(--lang-btn-hover);
+        }
+
         /* カジュアル版移行バナーのスタイリング */
         .casual-switch-banner {
             background-color: var(--card-bg);
@@ -128,6 +156,9 @@
                 width: 100%;
                 text-align: center;
                 box-sizing: border-box;
+            }
+            .language-switcher {
+                justify-content: center;
             }
         }
 
@@ -187,7 +218,7 @@
             padding: 0;
             border: none;
             color: inherit;
-        }
+            }
 
         ul, ol {
             padding-left: 20px;
@@ -263,7 +294,7 @@
             <div class="badge-container" style="margin-top: 10px;">
                 <span class="badge badge-tech">n8n Enterprise</span>
                 <span class="badge badge-tech">Node.js v20 LTS</span>
-                <span class="badge badge-tech">Gemini 2.0 / 1.5 Flash</span>
+                <span class="badge badge-tech">Gemini 3.1 Flash-Lite</span>
                 <span class="badge badge-tech">Pinecone Vector Store</span>
                 <span class="badge badge-tech">JavaScript (ES6+)</span>
                 <span class="badge badge-tech">Google Cloud API Platform</span>
@@ -273,14 +304,20 @@
 
     <div class="container">
 
-<div style="background-color: #111827; border: 1px solid #374151; border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin-bottom: 35px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-    <p style="margin: 0; color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">
-        💡 <strong>Looking for the story?</strong> If you'd like to read the background and problem-solving journey that led to this system in a pop slideshow format, please check out the Casual Edition.
-    </p>
-    <a href="index.html" target="_blank" style="display: inline-block; white-space: nowrap; background-color: #10b981; color: #ffffff; font-weight: bold; text-decoration: none; padding: 10px 20px; border-radius: 6px; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); font-family: 'Segoe UI', sans-serif;" onmouseover="this.style.backgroundColor='#059669'; this.style.transform='translateY(-1px)';" onmouseout="this.style.backgroundColor='#10b981'; this.style.transform='none';">
-        📊 View Casual Edition ➡️
-    </a>
-</div>
+        <div class="language-switcher">
+            <a href="portfolio-jp.html" class="lang-btn">
+                🇯🇵 Switch to Japanese (日本語)
+            </a>
+        </div>
+
+        <div class="casual-switch-banner">
+            <p class="casual-switch-text">
+                💡 <strong>Looking for the story?</strong> If you'd like to read the background and problem-solving journey that led to this system in a pop slideshow format, please check out the Casual Edition.
+            </p>
+            <a href="index.html" target="_blank" class="casual-switch-btn">
+                📊 View Casual Edition ➡️
+            </a>
+        </div>
 
         <div class="section">
             <h2>Executive Summary & Core Competencies</h2>
@@ -366,7 +403,7 @@ n8n start --tunnel</code></pre>
             <div class="insight-box">
                 <h4>💡 Technical Insight: Probability vs. Determinism</h4>
                 <p>
-                    No matter how strictly a Few-Shot prompt or system instruction is structured, probabilistic language models (e.g., Gemini 2.0 Flash) still carry a risk of token fluctuation and hallucination when performing multi-step mathematical calculations. In commercial operations, an invoicing error of even 1 cent destroys client trust and introduces legal liabilities. 
+                    No matter how strictly a Few-Shot prompt or system instruction is structured, probabilistic language models (e.g., Gemini 3.1 Flash-Lite) still carry a risk of token fluctuation and hallucination when performing multi-step mathematical calculations. In commercial operations, an invoicing error of even 1 cent destroys client trust and introduces legal liabilities. 
                 </p>
                 <p>
                     <strong>The Solution:</strong> The system was designed to separate concerns. LLMs are used exclusively for semantic understanding, categorization, and tone modulation (probabilistic tasks). Meanwhile, all quantitative evaluations are handled by an isolated, mathematical JavaScript execution block (deterministic task), ensuring 100% calculation accuracy.
@@ -389,7 +426,7 @@ n8n start --tunnel</code></pre>
             <div style="display: flex; flex-direction: column; max-width: 650px; margin: 20px auto;">
                 <div class="flow-step"><strong>1. Scheduled Ingestion Layer:</strong> Polling for unread transactional intents via the Gmail API.</div>
                 <div class="flow-arrow">⬇️</div>
-                <div class="flow-step"><strong>2. Context & Language Categorization:</strong> Gemini 2.0 Flash extracts metadata into structured JSON.</div>
+                <div class="flow-step"><strong>2. Context & Language Categorization:</strong> Gemini 3.1 Flash-Lite extracts metadata into structured JSON.</div>
                 <div class="flow-arrow">⬇️</div>
                 <div class="flow-step"><strong>3. JavaScript Defensive Parsing:</strong> Strips Markdown artifacts and sanitizes object tokens.</div>
                 <div class="flow-arrow">⬇️</div>
@@ -451,7 +488,7 @@ return { json: finalPayload };</code></pre>
 
             <h3>Regex-First Token Parsing Strategy</h3>
             <p>
-                To achieve a 0% hallucination rate for explicit patterns, the ingestion layer bypasses the LLM for structured string components. It uses a high-performance, deterministic Regular Expression engine inside a JavaScript execution node to extract unique transactional keys (such as precise multi-part identifiers) before passing the broader content to <strong>Gemini 2.0 Flash</strong> for semantic classification.
+                To achieve a 0% hallucination rate for explicit patterns, the ingestion layer bypasses the LLM for structured string components. It uses a high-performance, deterministic Regular Expression engine inside a JavaScript execution node to extract unique transactional keys (such as precise multi-part identifiers) before passing the broader content to <strong>Gemini 3.1 Flash-Lite</strong> for semantic classification.
             </p>
 
             <h3>The Code-Level Execution Context</h3>
@@ -475,7 +512,7 @@ function sanitizeJsonString(rawString) {
 
 let rawOutput = "";
 try {
-    // Ingest contextual response tokens from the upstream Gemini 2.0 Flash agent
+    // Ingest contextual response tokens from the upstream Gemini 3.1 Flash-Lite agent
     rawOutput = $input.all()[0].json.choices[0].message.content;
 } catch (e) {
     // Fallback vector for schema structural failures
