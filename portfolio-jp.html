@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>AIと共に駆け抜けた学校再開＆自動化ストーリー | ポートフォリオ</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #e0e7ff;
+            --secondary: #0f172a;
+            --accent-yellow: #facc15;
+            --accent-orange: #f97316;
+            --success-green: #22c55e;
+            --text-main: #1e293b;
+            --text-dark: #0f172a;
+            --bg-slide: #ffffff;
+            --pop-shadow: 12px 12px 0px var(--text-dark);
+            --button-shadow: 0 6px 0px var(--primary-dark);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+            background-color: #f0f4f8;
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 言語切り替えボタンの配置 */
+        .lang-switch-container {
+            position: absolute;
+            top: 20px;
+            right: 4vw;
+            z-index: 200;
+        }
+
+        .lang-btn {
+            background: var(--text-dark);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            box-shadow: 4px 4px 0px var(--accent-yellow);
+        }
+
+        .lang-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--accent-yellow);
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* スライド基本設定（はみ出し対策調整） */
+        .slide {
+            position: absolute;
+            width: 92vw;
+            max-width: 1150px;
+            height: 82vh;
+            max-height: 750px;
+            background: var(--bg-slide);
+            border-radius: 24px;
+            border: 4px solid var(--text-dark);
+            box-shadow: var(--pop-shadow);
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 35px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        /* コンテンツエリア（溢れた場合はスクロール） */
+        .slide-body {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-right: 20px;
+            scrollbar-width: thick;
+            scrollbar-color: var(--primary) #f1f5f9;
+        }
+
+        /* スクロールバーのデザイン */
+        .slide-body::-webkit-scrollbar { width: 14px; }
+        .slide-body::-webkit-scrollbar-track { 
+            background: #f1f5f9; 
+            border-radius: 10px; 
+            border: 2px solid #ddd;
+        }
+        .slide-body::-webkit-scrollbar-thumb { 
+            background: var(--primary); 
+            border-radius: 10px; 
+            border: 3px solid #f1f5f9;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+        .slide-header { margin-bottom: 20px; }
+        .slide-tag {
+            display: inline-block;
+            background: var(--accent-yellow);
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            box-shadow: 2px 2px 0px var(--text-dark);
+        }
+
+        h2 { font-size: 1.7rem; font-weight: 800; color: var(--text-dark); line-height: 1.4; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 10px; }
+        .slide-text { font-size: 1.05rem; line-height: 1.8; color: var(--text-dark); }
+        .slide-text p { margin-bottom: 18px; }
+        .slide-text strong { background: linear-gradient(transparent 60%, var(--accent-yellow) 60%); }
+
+        .tech-box {
+            background: var(--primary-light);
+            border: 2px solid var(--text-dark);
+            padding: 15px;
+            border-radius: 16px;
+            margin: 15px 0;
+            box-shadow: 4px 4px 0px var(--text-dark);
+        }
+
+        .tech-box h4 { color: var(--primary-dark); font-size: 1rem; font-weight: 800; margin-bottom: 6px; }/* サイドバー */
+        .slide-sidebar {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* centerから変更：スクロール時に上部が消えないように調整 */
+            border: 3px solid var(--text-dark);
+            background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+            background-size: 12px 12px;
+            height: 100%;
+            
+            /* 【変更】はみ出た場合のみ、縦方向にスクロールバーを表示 */
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
+        .img-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+
+            /* 【追加】全体を現状より5%小さく（95%のサイズに）調整 */
+            transform: scale(0.95);
+            transform-origin: top center; /* 縮小の基準点を上部中央にして余白を安定させる */
+        }
+
+        .img-stack img, .slide-sidebar > img {
+            max-width: 100%;
+            max-height: 190px; /* 【変更】200pxから190px（5%縮小）へ微調整 */
+            object-fit: contain;
+            border: 2px solid var(--text-dark);
+            border-radius: 12px;
+            background: white;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+
+        .evolution-point {
+            background: var(--accent-orange);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 10px 15px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-top: 15px;
+            text-align: center;
+            box-shadow: 3px 3px 0px var(--text-dark);
+        }
+
+        /* コントロール */
+        .controls {
+            position: absolute;
+            bottom: 3vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: 3px solid var(--text-dark);
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            transition: all 0.1s;
+            box-shadow: var(--button-shadow);
+        }
+
+        .btn:hover:not(:disabled) { transform: translateY(2px); box-shadow: 0 4px 0px var(--primary-dark); }
+        .btn:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0px var(--primary-dark); }
+        .btn:disabled { background: #cbd5e1; box-shadow: none; cursor: not-allowed; opacity: 0.7; }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 2px solid var(--text-dark);
+        }
+
+        .dot { width: 12px; height: 12px; background: #ddd; border: 1.5px solid var(--text-dark); border-radius: 50%; cursor: pointer; }
+        .dot.active { background: var(--accent-yellow); transform: scale(1.2); }
+
+        .index-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .index-btn { 
+            text-align: left; font-size: 0.85rem; padding: 10px; border: 2px solid var(--text-dark);
+            border-radius: 12px; background: #fff; cursor: pointer; font-weight: bold;
+            transition: 0.2s; box-shadow: 3px 3px 0 var(--text-dark);
+        }
+        .index-btn:hover { background: var(--primary-light); transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--text-dark); }
+
+        /* 漫画用 */
+        #manga-container { width: 100%; border: 3px solid var(--text-dark); border-radius: 15px; overflow: hidden; background: white; margin-top:10px; }
+        #manga-img { width: 100%; height: 280px; object-fit: contain; }
+        #manga-cap { padding: 10px; font-weight: 800; color: var(--accent-orange); text-align: center; border-top: 2px solid var(--text-dark); min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; }
+
+        /* レスポンシブ修正（はみ出し解決のためのメディアクエリ） */
+        @media (max-width: 950px) {
+            body {
+                overflow-y: auto; /* 全体がスクロールできるように */
+                height: auto;
+                padding: 60px 0;
+            }
+            .slide { 
+                grid-template-columns: 1fr; 
+                padding: 24px; 
+                height: auto; 
+                max-height: 88vh;
+                position: relative;
+                margin-bottom: 80px; /* コントロール用の余白 */
+                opacity: 0;
+                visibility: hidden;
+                display: none; /* 非アクティブ時は完全に隠す */
+            }
+            .slide.active {
+                display: grid;
+                opacity: 1;
+                visibility: visible;
+            }
+            .slide-sidebar { 
+                margin-top: 10px;
+                padding: 15px;
+                flex-direction: row; /* 横並びにしてコンパクトに */
+                gap: 15px;
+                justify-content: space-around;
+            }
+            .img-stack {
+                flex-direction: row;
+                gap: 8px;
+            }
+            .img-stack img, .slide-sidebar > img {
+                max-height: 120px;
+            }
+            .evolution-point {
+                margin-top: 0;
+                width: auto;
+            }
+            .controls {
+                position: fixed;
+                bottom: 15px;
+                background: rgba(240, 244, 248, 0.95);
+                padding: 10px;
+                border-radius: 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+            .lang-switch-container {
+                top: 10px;
+                right: 15px;
+            }
+        }
+    </style></head><body>
+
+    <div class="lang-switch-container">
+        <a href="https://github.com/Kikuyan55/portfolio" class="lang-btn">
+            <span>🌐</span> English / 英語版
+        </a>
+    </div>
+
+    <div class="presentation-container">
+        
+        <div class="slide active" id="slide-0">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">INTRO</span>
+                    <h2>堅苦しく経歴紹介やめました！<br>IT素人がエラーアンドトライを繰り返しAIからITを学んだ成長録</h2>
+                </div>
+                <div class="slide-text">
+                    <p>私のポートフォリオを開いていただきありがとうございます。以前は「n8nが～, 決定論的設計が～」とガチガチに書いていましたが、自分で読み返して<strong>「いつも私が面接してるアプリカンツがこんなガチガチのポートフォリオ提出してきて読みたいか？いや、絶対チラッと見て終わる」</strong>と気づしました。</p>
+                    <p>私はガチガチのIT畑で育ったエリートエンジニアではありませんが、<strong>「現場の課題を解決するために、AIを限界まで使い倒して形にする応用力」</strong>として、私がAIとパートナーを組めば経験豊富なエリートエンジニアの人達に引けを取らない自信があります！</p>
+                    <p>これは、IT初心者の私がフィリピンの英語学校を「私がいなくても回る環境」にするために、AIを相棒にして駆け抜けた、執念のシステム構築ストーリーです。どうぞ紙芝居のようにめくってご覧ください！</p>
+                </div>
+                <div class="tech-box">
+                    <h4>💡 このポートフォリオのコボレ話</h4>
+                    <p>IT畑の採用担当者様や、ITを知らない方でも「読んでて楽しい」と思えるポートフォリオをJavaScriptでポップなスライドショー形式にしてみました！</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="internet_school_e-learning_foreign_man.png" alt="堅苦しい案内">
+                    <div class="desktop-arrow" style="font-size:1.8rem; font-weight:900;">⬇️</div>
+                </div>
+                <img src="travel_online_pc_kaigai.png" alt="陽気な案内">
+                <div class="evolution-point">「次へ」でスタート！ ➡️</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-1">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">INDEX</span>
+                    <h2>スライド目次：気になる場所をクリック！</h2>
+                </div>
+                <div class="index-grid">
+                    <button class="index-btn" onclick="goToSlide(0)">01. はじめに（成長録）</button>
+                    <button class="index-btn" onclick="goToSlide(2)">03. きっかけ（AI探索期）</button>
+                    <button class="index-btn" onclick="goToSlide(3)">04. 初の共同作業（自作PC）</button>
+                    <button class="index-btn" onclick="goToSlide(4)">05. 転換点（フィリピンへ）</button>
+                    <button class="index-btn" onclick="goToSlide(5)" style="background:var(--accent-orange); color:white;">06. 一休み（起業4コマ漫画）</button>
+                    <button class="index-btn" onclick="goToSlide(6)">07. Project 1：SEO/AEO戦略</button>
+                    <button class="index-btn" onclick="goToSlide(7)">08. Project 2：現場意識改革</button>
+                    <button class="index-btn" onclick="goToSlide(8)">09. Project 3：AI音声教材開発</button>
+                    <button class="index-btn" onclick="goToSlide(9)">10. Project 4：n8n全自動化</button>
+                    <button class="index-btn" onclick="goToSlide(10)">11. 技術：n8n実装全ログ</button>
+                    <button class="index-btn" onclick="goToSlide(11)" style="background:var(--success-green); color:white;">12. 私の唯一無二の価値</button>
+                    <button class="index-btn" onclick="goToSlide(12)">13. おまけ：DIY・ハード実績</button>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="computer_man4_laugh.png" alt="案内" style="max-width:85%;">
+                <div class="evolution-point" style="background:var(--primary);">気になるページをClick！</div>
+            </div>
+        </div>
+<div class="slide" id="slide-2">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">2023 EARLY</span>
+                    <h2>映画ではなく現実。本当に「AIの時代が来る！？」</h2>
+                </div>
+                <div class="slide-text">
+                    <p>世の中にChatGPTが普及し始めた頃、私は元々Microsoft＋Edgeのユーザーだったため、いち早く「BingAI」に触れました。毎日プロンプトを打ち込んでは返ってくる回答の凄さに、ものすごい衝撃を受け<strong>「何が出来るのか」という可能性模索に興奮した</strong>のを今でも覚えています。</p>
+                    <p>その時に確信しました。<strong>「AIをマスターしておかないと、これからのビジネスの現場から必要とされなくなる」</strong>と。Constraintを逆手にとって<strong>「AIのスタートラインが世の中ほぼ一緒である今、私にとって大きなチャンスだ！」</strong>と喜びました。</p>
+                    <p>ここから私のAI学習意欲が爆発。AI開発の主役がPythonだと知り、「いつかPythonを勉強して、もっと面白い自動化をやってみたい」と妄想を膨らませ始めました。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="businessman8_niyari.png" alt="ニヤリ" style="max-height:220px;">
+                <div class="evolution-point">🚀 時代の波を直感！</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-3">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">2023 MAY</span>
+                    <h2>ハードもソフトも未知。今こそAIの実力を試すとき！</h2>
+                </div>
+                <div class="slide-text">
+                    <p>世間が「AI生成画像が本物にしか見えない」と大騒ぎに。この波に乗るべくPythonなんて1行も書けない私は、<strong>「今こそAIと一緒にAIを動かす時では？」</strong>と思い、さっそく格安の中古デスクトップPCを購入しました！</p>
+                    <p>そこからがBingAIとの二人三脚です。「グラボってどうやって変えるの？」「電源がすぐ落ちるのなんで？」「HDDからSSDへの引っ越し方法は？」</p>
+                    <p>AIの指示通りにハードウェアの知識ゼロから環境を整え、AIに言われるままに<strong>PowershellでPythonを操作デビュー！</strong>エラー＆トライの末にローカル環境でのStable Diffusion実装をやり遂げました！（※なお、現在もハード面のスキルはこれがピークです😅）</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="computer_jisaku_bunkai.png" alt="自作PC" style="max-height:220px;">
+                <div class="evolution-point">🛠️ AIをバディにPC改造</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PIVOT</span>
+                    <h2>「学校を再開して！」安定を捨ててフィリピンの現場へ</h2>
+                </div>
+                <div class="slide-text">
+                    <p>コールセンターSV満了後、ITを学ぶためエンジニアリング企業へ。しかし直後、休校中のフィリピンの英語学校から支援者や生徒の切実な声が届きました。「遠隔運営でいいなら…」と再開したものの、現場は大混乱。自動化も共有の仕組みも整っていませんでした。</p>
+                    <p><strong>「私がいなくても回る環境は、私が現場に行って泥をすすりながらシステムを作らなければ絶対に完成しない」</strong>。そう決意し、2025年3月退職。退職日翌日にフィリピンへ飛び込みました。</p>
+                </div>
+                <div class="tech-box">
+                    <h4>🔥 この時の覚悟</h4>
+                    <p><strong>「私が別の本業を手に入れても、業務が自動で回り続ける強固な組織を作る」</strong>。今回の転職活動は、組織の完成を見届けた私の「終着点探し」です。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="passport_checkin.png" alt="旅立ち">
+                    <img src="family_airplane_travel.png" alt="フライト">
+                </div>
+                <div class="evolution-point">🇵🇭 現場主義の再始動</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-5">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">BREAK</span>
+                    <h2>一休み：漫画「俺たちはフィリピンにいた!!」</h2>
+                </div>
+                <div class="slide-text">
+                    <p>起業体験を形にしてみたくて描いた漫画です。現場のカオスを少しだけご覧ください。5秒ごとに進みます。</p>
+                    <div id="manga-container">
+                        <img id="manga-img" src="ore-p1.jpg" alt="漫画">
+                        <div id="manga-cap">（読み込み中...）</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="travel_online_pc_kaigai.png" alt="漫画" style="max-height:180px;">
+                <button class="evolution-point" style="cursor:pointer;" onclick="nextManga()">次のコマへ ➡️</button>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 1</span>
+                    <h2>プロジェクト①：SEO/AEO初心者から業界屈指 of 多言語ページへ</h2>
+                    <div class="subtitle">HTML初心者から1年で14言語・約400ページの最新SEO/AEO対策を一人で実装</div>
+                </div>
+                <div class="slide-text">
+                    <p>現場復帰して直面した最初の壁、それがSEOでした。5年間の放置により、かつて検索トップ10に入っていた自社サイトはランキングの彼方に埋もれていました。</p>
+                    <p>当時の私はSEO初心者でしたが、ここから死に物狂いの「改善➡️学習➡️改善」のループを開始。単に過去のキーワードを追うのではなく、学校のブランディング刷新に合わせて「安売り路線」を廃止し、AI時代に最適化された<strong>AEO（回答エンジン最適化）</strong>に狙いを定めました。</p>
+                    <p>さらに「コスパの良いフィリピン留学」の存在自体を知らない世界中の潜在顧客へ届けるため、大手他社も手をつけていない<strong>「全ページの多言語化（14言語・約400ページ）」</strong>というブルーオーシャン戦略を2025年11月に立案。デザインの刷新も含め2026年3月までに集客基盤をゼロから構築し、AI検索でも強固にヒットする仕組みを完成させました。</p>
+                </div>
+                <div class="tech-box" style="background: #f0fdf4; border-color: #bbf7d0;">
+                    <h4 style="color: #16a34a; margin-top: 0;">💡 挑戦を終えての感想</h4>
+                    <p style="font-size:0.9rem; margin:0; line-height:1.6;">私のITスキルを大きく引き上げたのは、間違いなくこのSEO/AEO対策です。多言語化の過程でAIのハルシネーション（作り話）の深刻さに直面しましたが、逆にAIを疑い監視することで、私自身の知識が飛躍的に向上しました。</p>
+                    <p style="font-size:0.9rem; margin:5px 0 0 0; line-height:1.6;">また、表示速度向上のために<code>&lt;picture&gt;</code>タグでWebPとJPEGを切り替える実装を行ったり、PowerShellとImageMagicを組み合わせて画像調整を自動化し**作業時間を95%短縮**するなど、JavaScriptやSVGも含めて実務に直結する多くの技術を深く学ぶことができました。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="kabu_chart_woman_cry.png" alt="下落">
+                    <img src="kabu_chart_woman.png" alt="安定">
+                    <img src="kabu_chart_woman_happy.png" alt="上昇">
+                </div>
+                <div class="evolution-point">📈 執念のV字回復</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-7">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 2</span>
+                    <h2>プロジェクト②：ローテク現場の意識改革</h2>
+                    <div class="subtitle">「情報共有」の概念がないスタッフにOneDriveを浸透させ、自動化の土台を作る</div>
+                </div>
+                <div class="slide-text">
+                    <p>フィリピン人スタッフたちは明るく優秀ですが、IT知識に関しては極めてローテクでした。「誰が、どの生徒の対応を、どこまでやったか」という日常業務の情報共有ルールがなく、すべての業務が属人化していたのです。</p>
+                    <p>そこで2025年8月にかけ、まずはクラウド（OneDrive）上に全員でリアルタイム更新できるExcelシートを構築。<strong>「ここにデータを集約する」という文化とルール</strong>を徹底的に叩き込み、運用の安定化を図りました。</p>
+                    <p>この時に、現場に強引にでも「クラウドにデータを入力する習慣」を根付かせたからこそ、のちのn8nによる爆速バックオフィス自動化（2026年6月）の伏線へと綺麗に繋がることになりました。</p>
+                </div>
+                <div class="tech-box" style="background: #fffbeb; border-color: #fde68a;">
+                    <h4 style="color: #d97706; margin-top:0;">👥 業務改善の泥臭いアプローチ</h4>
+                    <p style="font-size:0.9rem; margin:0; line-height:1.5;">システムだけを導入しても現場は動きません。人間のリテラシーに合わせた「使い慣れたExcelの共有」から段階的にステップアップさせる、現場主義 of マネジメントを実践しました。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="computer_couple.png" alt="指導" style="max-height:220px;">
+                <div class="evolution-point">🤝 リテラシーの底上げ</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-8">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 3</span>
+                    <h2>プロジェクト③：危機管理＆AI音声教材の開発</h2>
+                    <div class="subtitle">失敗から生まれた、JavaScript＋Web Speech API教材システム</div>
+                </div>
+                <div class="slide-text">
+                    <p>現場のもう一つの課題は、スタッフの「著作権への意識の低さ」でした。市販教材を悪気なく複製してしまうことによる将来的な法的リスクを防ぐため、即座にビジネス利用可能なオープンソース教材への全面移行を断行しました。</p>
+                    <p>さらにリスニング教材を内製化すべく、Copilotを相棒に「オリジナル音声生成AI」の開発に挑戦。Anacondaプロンプト上で<strong>Tacotron2</strong>や<strong>Waveglow</strong>を動かし、YouTube等の音声から特定の声を学習させて「架空の人物の声」を作ろうと500前後のサンプルを学習させました。しかし、エラーを乗り越え完成させたものの、声のバリエーションや詳細設定が難しく、実用面で不自然さが残る結果となりました。</p>
+                    <p>ここで即座に路線変更！「手軽に現場で使える実用性」を最優先し、HTML＋JavaScriptで<strong>Web Speech API（SpeechSynthesis）</strong>を叩く軽量システムを自作。教師がEdgeでページを開いて文章を入力し、プルダウンメニューで設定を調整するだけで、授業で役立つリアルなネイティブ英語音声をボタン一つで再生できるツールを完成させ、安全かつリッチな授業環境を実現しました。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="job_programmer.png" alt="開発">
+                    <img src="computer_screenreader_shikakusyougai.png" alt="リスニング">
+                </div>
+                <div class="evolution-point">🔊 実用性を最優先</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-9">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 4</span>
+                    <h2>プロジェクト④：n8nによる問い合わせ＆施設管理の全自動化</h2>
+                    <div class="subtitle">「ノード？トリガー？」知識ゼロからわずか2ヶ月で構築したワークフロー</div>
+                </div>
+                <div class="slide-text">
+                    <p>ブルーオーシャン戦略の成果により、2025年の赤字経営から2026年にはV字回復を達成。私が現場を離れても回るシステムを作るため、2026年4月下旬、ワークフロー自動化ツール「n8n」の導入に踏み切りました。当時は完全に無知な状態からのスタートです。</p>
+                    <p>構築したのは、メール受信時に<strong>Gemini 3.1 Flash-lite</strong>が文脈を自動分類し、ベクトルDB（<strong>Pinecone</strong>）からRAG検索を行って最適な返信下書きを数十秒で作成するシステムです。機密性保持のため、従量課金APIを使いデータが学習されない設計としました。さらに、インフラ維持費の自動計算においてスプレッドシートの「上書きバグ」を回避するため、独自のMemory-MergeロジックをJavaScriptで実装しました。</p>
+                    <p>また、顧客情報管理など完全な機密性が求められるシステムは、AIを通さずJSコードと関数のみでセキュアに構築。AIの不確実さを堅牢なプログラムでガードする<strong>「ハイブリッド決定論的設計」</strong>をわずか2ヶ月で完成させ、**スタッフの業務工数を80%削減**することに成功しました。</p>
+                </div>
+                <div class="tech-box">
+                    <h4 style="margin-top:0; color:var(--primary-dark); text-align:center;">⚙️ 構築したn8nエコシステム</h4>
+                    <p style="text-align:center; font-weight:900; margin:0; font-size:0.95rem;">n8n Workflows ｜ Gemini 3.1 / 3.5 Flash-lite ｜ JavaScript ｜ Pinecone Vector Store ｜ Webhook ｜ ngrok</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="ai_computer_sousa_robot.png" alt="自動化" style="max-height:220px;">
+                <div class="evolution-point">🤖 離れても回る仕組み</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">IMPLEMENTATION LOG</span>
+                    <h2>n8n実装ログ：全5計画の結果と妥協点</h2>
+                </div>
+                <div class="slide-text" style="font-size:0.92rem; line-height:1.6;">
+                    <p><strong>① メール自動返信＆多言語化（試行錯誤と妥協点）:</strong><br>
+                    「顧客に親身で丁寧な対応を」と考え、当初AIのプロンプトのみで試すも失敗. 私らしい文章作成には過去の返信サンプルの学習が不可不可欠と気づき、Pineconeへデータを蓄積しました。当校の料金形態は複雑なため学習量も膨大に。最初はGeminiの提案通りに1000トークン前後でチャンク分割していましたが、情報がぶつ切りになり誤った情報を組み合わせるミスが発生。情報を切らずに「ファイルごと」読み込させせる手法へ変更したことで精度が劇的に向上しました。<br>
+                    また、言語ごとの精度のバラつきを防ぐため、ワークフローを『日本語』VS『非日本語』の2分岐フローに最適化。およそ2億通りに及ぶ料金計算はLLMでのミスが防ぎきれなかったため、計算はn8nに『仮』で出させ、最終確認は私が完璧に組み上げたJavaScriptシミュレーターをスタッフが叩いてコピペする運用へと「戦略的妥協」を選択。多言語化の最終調整もLLMの得意な「英語からの翻訳」に割り切ることで、削減工数は目標の95%には届かなかったものの、**80%削減かつ「正確性100%」の案内**を担保しました。</p>
+                    
+                    <p><strong>② SNS DM自動化（戦略的後回し）:</strong><br>
+                    テスト環境としてngrokを用いたWebhook実装を試行錯誤したものの、接続に苦戦。そこで問い合わせのデータ比率を再分析したところ、メールが90%、FB/IG/LINEが10%未満、他SNSはゼロという事実が判明。成果への最短距離をとるため自動化は戦略的に「後回し」と判断しました。代わりに、構築済みのメールワークフローに回答用フローを追加し、手動でもAIが即座に回答文を作れるようアレンジしてカバーしました。</p>
+                    
+                    <p><strong>③ スタッフ向け報告作業の簡略化（結果）:</strong><br>
+                    想定通りに完成。スタッフがテンプレ通りに入力した独特なフィリピーノ英語を、AIが一般的な標準英語へ自動変換してスプレッドシートへ出力。関数とコードを組み合わせて複雑な報告業務をシンプル化し、現地スタッフが迷わず経費報告を行える環境を整えました。</p>
+                    
+                    <p><strong>④ 顧客・施設管理の自動化（結果）:</strong><br>
+                    スプレッドシートと連携し、現地費用の請求額算出、予約・部屋管理、メールアドレス管理などの自動化に成功。セキュリティを考慮してAI不使用のコードのみで管理しているため、情報保護も万全です。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="job_programmer.png" alt="ログ" style="max-height:220px;">
+                <div class="evolution-point">📝 妥協なき試行錯誤</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-11">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">VALUE</span>
+                    <h2>私が御社で発揮できる「唯一無二の価値」</h2>
+                </div>
+                <div class="slide-text">
+                    <p>私の強みは、優秀な学歴や、経験豊富なIT知識ではありません。**「必要な能力を持っていないなら身につけよう」という強い探求心と、年齢を重ねるごとに増していく学習意欲**です。</p>
+                    <p>初めてコールセンター業務に就いた際も、自分が初心者であることを自覚し、周囲の経験者の応対に耳を立てて技を盗み、自分ならどう答えるかのシミュレーションと徹底的なリサーチを繰り返しました。未経験ながら正確な応対と確実なクレーム処理をこなしたことで上司から評価され、異例の速さでSVへ昇格。さらに東京のSVで成果を出したことで、**東京・大阪の両方の支店の統括SV**にまで上り詰めました。</p>
+                    <p>変化のないルーティン維持よりも、「改善」と「効率化」を好み、能動的に動ける起業家精神が私の根底にあります。</p>
+                    <p>同じ業界でキャリアを積んできた他の候補者の方々と比べ、現時点での既得知識やスキルは劣っている部分があるかもしれません。しかし、それを短期間で覆すだけの**圧倒的な行動力と学習意欲**こそが、私の唯一無二の価値であると確信しています。</p>
+                </div>
+                <div class="tech-box" style="background:#d1fae5; border-color:#a7f3d0;">
+                    <h4 style="color:#16a34a; text-align:center; margin-top:0;">📩 いつでもお声がけください</h4>
+                    <p style="font-weight:bold; margin:0; text-align:center; color:#065f46;">ご覧いただきありがとうございました。次のステップの面接でお会いできれば幸いです。</p>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="job_english_tsuuyaku.png" alt="お辞儀" style="max-height:220px;">
+                <div class="evolution-point" style="background:var(--success-green);">✉️ 面接でお会いしましょう！</div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">BONUS</span>
+                    <h2>その他、履歴書には通常書かない「物理・現場解決」実績</h2>
+                </div>
+                <div class="slide-text">
+                    <p style="font-weight:800; color:var(--primary-dark); margin-bottom:5px;">🛠️ ＜DIY＞ フィリピンの学校における物理的なインフラ改修</p>
+                    <ul style="padding-left:20px; margin-bottom:20px; font-size:0.92rem; line-height:1.6;">
+                        <li>学校敷地と道路の間の側溝に、スタッフと共に土木作業で橋を建設（市の許可取得済み、8年目になりますが現在も全く問題なく頑丈に使用できています）</li>
+                        <li>水道管の軽微な増設</li>
+                        <li>破損したアウトレット（壁のコンセント）の交換</li>
+                        <li>電気スイッチの回路不良（現地の欠陥工事）の修理</li>
+                    </ul>
+                    
+                    <p style="font-weight:800; color:var(--accent-orange); margin-bottom:5px;">💻 ＜ハードウェア・ネットワーク系＞</p>
+                    <ul style="padding-left:20px; font-size:0.92rem; line-height:1.6;">
+                        <li>NVR（ネットワークビデオレコーダー）を用いたCCTVカメラの設置・管理</li>
+                        <li>ネズミの被害により寸断された天井裏の埋め込みイーサネットケーブルの全張り替え・再設置</li>
+                        <li>使用不可になった旧PC等を分解してハードディスク（HDD）を取り出し、HDDなしの新しいNVRや外付けハードディスクとして再利用</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-sidebar">
+                <img src="computer_jisaku_bunkai.png" alt="DIY" style="max-height:220px;">
+                <div class="evolution-point" style="background:var(--secondary); color:white;">🔧 サバイバル能力も完備！</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="prevBtn" onclick="prevSlide()">戻る</button>
+            <div class="progress-dots" id="dot-container"></div>
+            <button class="btn" id="nextBtn" onclick="nextSlide()">次へ</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentIdx = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dotContainer = document.getElementById('dot-container');
+        
+        // 漫画データ
+        const mangaData = [
+            { src: 'ore-p1.jpg', text: '【第1話】俺たちはフィリピンにいた!!' },
+            { src: 'ore-p2.jpg', text: '「きゃー！【得体のしれない甲高い叫び声】」「え？」' },
+            { src: 'ore-p3.jpg', text: '「おいおいおい…」ドン引きしている 【ナレ：この時俺は…】' },
+            { src: 'ore-p4.jpg', text: '【ナレ：フィリピンにいた!!】「豚の鳴き声でした」「嘘だろ!?」' },
+            { src: 'ore-p5.jpg', text: '俺たちはフィリピンに「いたたたたたたた（痛）」' }
+        ];
+        let mangaIdx = 0;
+        let mangaTimer = null;
+
+        // ドット生成
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        });
+
+        function updateUI() {
+            // スライド表示制御
+            slides.forEach((s, i) => {
+                if (window.innerWidth <= 950) {
+                    // モバイル環境：displayの切り替えを確実にする
+                    s.style.display = (i === currentIdx) ? 'grid' : 'none';
+                }
+                s.classList.toggle('active', i === currentIdx);
+            });
+            // ドット制御
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentIdx);
+            });
+            // ボタン状態
+            document.getElementById('prevBtn').disabled = (currentIdx === 0);
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentIdx === slides.length - 1) {
+                nextBtn.innerText = "最初に戻る";
+                nextBtn.style.background = "var(--secondary)";
+            } else {
+                nextBtn.innerText = "次へ";
+                nextBtn.style.background = "var(--primary)";
+            }
+            // スクロール位置のリセット
+            const activeBody = slides[currentIdx].querySelector('.slide-body');
+            if(activeBody) activeBody.scrollTop = 0;
+
+            // 漫画タイマー管理
+            if (currentIdx === 5) startManga(); else stopManga();
+        }
+
+        function nextSlide() { currentIdx = (currentIdx + 1) % slides.length; updateUI(); }
+        function prevSlide() { currentIdx = (currentIdx - 1 + slides.length) % slides.length; updateUI(); }
+        function goToSlide(i) { currentIdx = i; updateUI(); }
+
+        // 漫画スライド
+        function startManga() { stopManga(); mangaTimer = setInterval(nextManga, 5000); renderManga(); }
+        function stopManga() { clearInterval(mangaTimer); }
+        function nextManga() { mangaIdx = (mangaIdx + 1) % mangaData.length; renderManga(); }
+        function renderManga() {
+            const img = document.getElementById('manga-img');
+            const cap = document.getElementById('manga-cap');
+            if (img && cap) { img.src = mangaData[mangaIdx].src; cap.innerText = mangaData[mangaIdx].text; }
+        }
+
+        // キー操作
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // ウィンドウリサイズ時の挙動補正
+        window.addEventListener('resize', () => {
+            slides.forEach((s, i) => {
+                if (window.innerWidth > 950) {
+                    s.style.display = '';
+                }
+            });
+            updateUI();
+        });
+    </script>
+</body>
+</html>

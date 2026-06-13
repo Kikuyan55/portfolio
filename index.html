@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Reopening & Automation Story Driven with AI | Portfolio</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #e0e7ff;
+            --secondary: #0f172a;
+            --accent-yellow: #facc15;
+            --accent-orange: #f97316;
+            --success-green: #22c55e;
+            --text-main: #1e293b;
+            --text-dark: #0f172a;
+            --bg-slide: #ffffff;
+            --pop-shadow: 12px 12px 0px var(--text-dark);
+            --button-shadow: 0 6px 0px var(--primary-dark);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+            background-color: #f0f4f8;
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Language switch button positioning */
+        .lang-switch-container {
+            position: absolute;
+            top: 20px;
+            right: 4vw;
+            z-index: 200;
+        }
+
+        .lang-btn {
+            background: var(--text-dark);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            box-shadow: 4px 4px 0px var(--accent-yellow);
+        }
+
+        .lang-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--accent-yellow);
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Slide basic settings */
+        .slide {
+            position: absolute;
+            width: 92vw;
+            max-width: 1150px;
+            height: 82vh;
+            max-height: 750px;
+            background: var(--bg-slide);
+            border-radius: 24px;
+            border: 4px solid var(--text-dark);
+            box-shadow: var(--pop-shadow);
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 35px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        /* Content area */
+        .slide-body {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-right: 20px;
+            scrollbar-width: thick;
+            scrollbar-color: var(--primary) #f1f5f9;
+        }
+
+        /* Scrollbar design */
+        .slide-body::-webkit-scrollbar { width: 14px; }
+        .slide-body::-webkit-scrollbar-track { 
+            background: #f1f5f9; 
+            border-radius: 10px; 
+            border: 2px solid #ddd;
+        }
+        .slide-body::-webkit-scrollbar-thumb { 
+            background: var(--primary); 
+            border-radius: 10px; 
+            border: 3px solid #f1f5f9;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+        .slide-header { margin-bottom: 20px; }
+        .slide-tag {
+            display: inline-block;
+            background: var(--accent-yellow);
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            box-shadow: 2px 2px 0px var(--text-dark);
+        }
+
+        h2 { font-size: 1.7rem; font-weight: 800; color: var(--text-dark); line-height: 1.4; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 10px; }
+        .slide-text { font-size: 1.05rem; line-height: 1.8; color: var(--text-dark); }
+        .slide-text p { margin-bottom: 18px; }
+        .slide-text strong { background: linear-gradient(transparent 60%, var(--accent-yellow) 60%); }
+
+        .tech-box {
+            background: var(--primary-light);
+            border: 2px solid var(--text-dark);
+            padding: 15px;
+            border-radius: 16px;
+            margin: 15px 0;
+            box-shadow: 4px 4px 0px var(--text-dark);
+        }
+
+        .tech-box h4 { color: var(--primary-dark); font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+
+        /* Sidebar */
+        .slide-sidebar {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            border: 3px solid var(--text-dark);
+            background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+            background-size: 12px 12px;
+            height: 100%;
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
+        .img-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.95);
+            transform-origin: top center;
+        }
+
+        .img-stack img, .slide-sidebar > img {
+            width: 100%;
+            max-height: 190px;
+            object-fit: contain;
+            border: 2px solid var(--text-dark);
+            border-radius: 12px;
+            background: white;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+
+        .desktop-arrow {
+            font-size: 1.8rem;
+            font-weight: 900;
+        }
+
+        .evolution-point {
+            background: var(--accent-orange);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 10px 15px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-top: 15px;
+            text-align: center;
+            box-shadow: 3px 3px 0px var(--text-dark);
+        }
+
+        .evolution-point.primary-bg {
+            background: var(--primary);
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 3vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: 3px solid var(--text-dark);
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            transition: all 0.1s;
+            box-shadow: var(--button-shadow);
+        }
+
+        .btn:hover:not(:disabled) { transform: translateY(2px); box-shadow: 0 4px 0px var(--primary-dark); }
+        .btn:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0px var(--primary-dark); }
+        .btn:disabled { background: #cbd5e1; box-shadow: none; cursor: not-allowed; opacity: 0.7; }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 2px solid var(--text-dark);
+        }
+
+        .dot { width: 12px; height: 12px; background: #ddd; border: 1.5px solid var(--text-dark); border-radius: 50%; cursor: pointer; }
+        .dot.active { background: var(--accent-yellow); transform: scale(1.2); }
+
+        .index-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .index-btn { 
+            text-align: left; font-size: 0.85rem; padding: 10px; border: 2px solid var(--text-dark);
+            border-radius: 12px; background: #fff; cursor: pointer; font-weight: bold;
+            transition: 0.2s; box-shadow: 3px 3px 0 var(--text-dark);
+        }
+        .index-btn:hover { background: var(--primary-light); transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--text-dark); }
+        .index-btn.orange-accent { background: var(--accent-orange); color: white; }
+        .index-btn.green-success { background: var(--success-green); color: white; }
+        .sidebar-index-img { max-width: 85%; }
+
+        /* For Comic */
+        #manga-container { width: 100%; border: 3px solid var(--text-dark); border-radius: 15px; overflow: hidden; background: white; margin-top:10px; }
+        #manga-img { width: 100%; height: 280px; object-fit: contain; }
+        #manga-cap { padding: 10px; font-weight: 800; color: var(--accent-orange); text-align: center; border-top: 2px solid var(--text-dark); min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; }
+
+        /* Responsive Styles */
+        @media (max-width: 950px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+                padding: 60px 0;
+            }
+            .slide { 
+                grid-template-columns: 1fr; 
+                padding: 24px; 
+                height: auto; 
+                max-height: 88vh;
+                position: relative;
+                margin-bottom: 80px;
+                opacity: 0;
+                visibility: hidden;
+                display: none;
+            }
+            .slide.active {
+                display: grid;
+                opacity: 1;
+                visibility: visible;
+            }
+            .slide-sidebar { 
+                margin-top: 10px;
+                padding: 15px;
+                flex-direction: row;
+                gap: 15px;
+                justify-content: space-around;
+            }
+            .img-stack {
+                flex-direction: row;
+                gap: 8px;
+            }
+            .img-stack img, .slide-sidebar > img {
+                max-height: 120px;
+            }
+            .evolution-point {
+                margin-top: 0;
+                width: auto;
+            }
+            .controls {
+                position: fixed;
+                bottom: 15px;
+                background: rgba(240, 244, 248, 0.95);
+                padding: 10px;
+                border-radius: 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+            .lang-switch-container {
+                top: 10px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="lang-switch-container">
+        <a href="./portfolio-jp.html" class="lang-btn">
+            <span>🌐</span> Japanese / 日本語版
+        </a>
+    </header>
+
+    <main class="presentation-container">
+        
+        <section class="slide active" id="slide-0">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">INTRO</span>
+                    <h2>I stopped doing rigid career introductions!<br>A growth record of an IT novice repeating error & trial to learn IT from AI</h2>
+                </div>
+                <div class="slide-text">
+                    <p>Thank you for opening my portfolio. Previously, I wrote this very rigidly, saying "n8n is like this, deterministic design is like that." However, reading it back, I realized: <strong>"If the applicants I always interview submitted such a stiff portfolio, would I want to read it? No, I would definitely just glance at it and stop."</strong></p>
+                    <p>I am not an elite engineer raised in a rigid IT background. However, when it comes to <strong>"the practical ability to use AI to its absolute limit to solve real-world problems and bring them to life,"</strong> I am confident that if I partner with AI, I can stand shoulder-to-shoulder with experienced, elite engineers!</p>
+                    <p>This is a story of determination and system building, where I, as an IT beginner, partnered with AI to create an environment where my English school in the Philippines can run smoothly even without me. Please flip through it like a picture story show!</p>
+                </div>
+                <div class="tech-box">
+                    <h4>💡 Behind the Scenes of This Portfolio</h4>
+                    <p>I created this portfolio using JavaScript in a pop-up slideshow format so that both IT recruiters and those who don't know about IT can find it "fun to read"!</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="./internet_school_e-learning_foreign_man.png" alt="Stiff Guide">
+                    <div class="desktop-arrow">⬇️</div>
+                </div>
+                <img src="./travel_online_pc_kaigai.png" alt="Cheerful Guide">
+                <div class="evolution-point">Click "Next" to Start! ➡️</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-1">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">INDEX</span>
+                    <h2>Slide Table of Contents: Click the area you are interested in!</h2>
+                </div>
+                <div class="index-grid">
+                    <button class="index-btn" onclick="goToSlide(0)">01. Introduction (Growth Record)</button>
+                    <button class="index-btn" onclick="goToSlide(2)">03. The Trigger (AI Exploration Period)</button>
+                    <button class="index-btn" onclick="goToSlide(3)">04. First Collaboration (Custom PC)</button>
+                    <button class="index-btn" onclick="goToSlide(4)">05. The Turning Point (To the Philippines)</button>
+                    <button class="index-btn" onclick="goToSlide(5)" class="index-btn orange-accent">06. Take a Break (4-Panel Entrepreneur Comic)</button>
+                    <button class="index-btn" onclick="goToSlide(6)">07. Project 1: SEO/AEO Strategy</button>
+                    <button class="index-btn" onclick="goToSlide(7)">08. Project 2: Transforming On-site Mindsets</button>
+                    <button class="index-btn" onclick="goToSlide(8)">09. Project 3: AI Audio Teaching Material Development</button>
+                    <button class="index-btn" onclick="goToSlide(9)">10. Project 4: n8n Full Automation</button>
+                    <button class="index-btn" onclick="goToSlide(10)">11. Tech: n8n Implementation Full Log</button>
+                    <button class="index-btn" onclick="goToSlide(11)" class="index-btn green-success">12. My One-and-Only Value</button>
+                    <button class="index-btn" onclick="goToSlide(12)">13. Bonus: DIY & Hardware Achievements</button>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./computer_man4_laugh.png" alt="Guide" class="sidebar-index-img">
+                <div class="evolution-point primary-bg">Click the page you want to see!</div>
+            </aside>
+        </section>
+
+<section class="slide" id="slide-2">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">2023 EARLY</span>
+                    <h2>Not a movie, but reality. Is the "Age of AI" really coming!?</h2>
+                </div>
+                <div class="slide-text">
+                    <p>Around the time ChatGPT started spreading across the world, since I was originally a Microsoft + Edge user, I was quick to experience "BingAI." I still remember being incredibly shocked by the amazing answers that came back every time I typed a prompt, and <strong>getting excited while exploring the possibilities of "what can be done."</strong></p>
+                    <p>At that moment, I became certain. <strong>"If I don't master AI, I will no longer be needed in future business environments."</strong> Turning the constraint on its head, I rejoiced, thinking, <strong>"Since almost the entire world is at the exact same starting line with AI right now, this is a huge opportunity for me!"</strong></p>
+                    <p>From here, my desire to learn AI exploded. Learning that Python is the main character in AI development, I started daydreaming, thinking, "I want to study Python someday and try even more interesting automations."</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <!-- GitHub Pages用にパスを ./ に変更 -->
+                <img src="./businessman8_niyari.png" alt="Smirk" style="max-height:220px;">
+                <div class="evolution-point">🚀 Intuition for the Wave of the Times!</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-3">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">2023 MAY</span>
+                    <h2>Both hardware and software are unknown. Now is the time to test AI's real ability!</h2>
+                </div>
+                <div class="slide-text">
+                    <p>The world was making a big fuss saying, "AI-generated images look just like the real thing." To ride this wave, even though I couldn't write a single line of Python, I thought, <strong>"Isn't right now the perfect time to operate AI together with AI?"</strong> and immediately purchased a cheap, used desktop PC!</p>
+                    <p>From there, it was a three-legged race with BingAI. "How do I change a graphics card?" "Why does the power turn off immediately?" "How do I migrate from an HDD to an SSD?"</p>
+                    <p>Following the AI's instructions, I prepared the environment from zero hardware knowledge, and as told by the AI, <strong>made my debut operating Python via PowerShell!</strong> After a series of errors and trials, I successfully implemented Stable Diffusion in a local environment! (*Note: Even now, this remains the peak of my hardware skills 😅)</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./computer_jisaku_bunkai.png" alt="Custom PC" style="max-height:220px;">
+                <div class="evolution-point">🛠️ Modding a PC with AI as a Buddy</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-4">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PIVOT</span>
+                    <h2>"Please reopen the school!" Throwing away stability to go on-site in the Philippines</h2>
+                </div>
+                <div class="slide-text">
+                    <p>After completing my term as a call center SV, I joined an engineering company to learn IT. However, immediately after, earnest voices from supporters and students reached me from the closed English school in the Philippines. Although we reopened on the condition that "remote management is fine," the actual site was in total chaos. Neither automation nor sharing mechanisms were in place.</p>
+                    <p><strong>"An environment that runs without me will never be completed unless I go to the site myself and build the system while getting my hands dirty."</strong> With that determination, I resigned in March 2025. The very day after my resignation, I dove straight into the Philippines.</p>
+                </div>
+                <div class="tech-box">
+                    <h4>🔥 My Resolve at This Time</h4>
+                    <p><strong>"Even if I acquire another main business, I will build a strong organization where operations continue to run automatically."</strong> This current job hunt is a "search for my final destination" after witnessing the completion of that organization.</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="./passport_checkin.png" alt="Departure">
+                    <img src="./family_airplane_travel.png" alt="Flight">
+                </div>
+                <div class="evolution-point">🇵🇭 Restart of On-site Focus</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-5">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">BREAK</span>
+                    <h2>Take a Break: Comic "We Were in the Philippines!!"</h2>
+                </div>
+                <div class="slide-text">
+                    <p>This is a comic I drew because I wanted to give shape to my entrepreneurial experiences. Please take a small look at the chaos on-site. It advances every 5 seconds.</p>
+                    <div id="manga-container">
+                        <img id="manga-img" src="./ore-p1.jpg" alt="Comic">
+                        <div id="manga-cap">(Loading...)</div>
+                    </div>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./travel_online_pc_kaigai.png" alt="Comic Art" style="max-height:180px;">
+                <button class="evolution-point" style="cursor:pointer;" onclick="nextManga()">To Next Panel ➡️</button>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-6">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 1</span>
+                    <h2>Project ①: From an SEO/AEO Beginner to Industry-Leading Multilingual Pages</h2>
+                    <div class="subtitle">Implemented latest SEO/AEO measures across 14 languages and approx. 400 pages alone within 1 year from being an HTML beginner</div>
+                </div>
+                <div class="slide-text">
+                    <p>The first wall I faced after returning to the site was SEO. Due to being left abandoned for 5 years, our company website, which used to be in the top 10 search results, was buried far beyond the rankings.</p>
+                    <p>At the time, I was an SEO beginner, but from there, I started a frantic loop of "Improvement ➡️ Learning ➡️ Improvement." Instead of simply chasing past keywords, I abolished the "cheap price route" to match the school's branding renewal, and aimed directly at <strong>AEO (Answer Engine Optimization)</strong>, which is optimized for the AI era.</p>
+                    <p>Furthermore, to reach potential customers around the world who don't even know that "cost-effective study abroad in the Philippines" exists, I formulated a blue ocean strategy in November 2025 to <strong>"make all pages multilingual (14 languages, approx. 400 pages),"</strong> which other major competitors haven't touched. Including a design renewal, I built the customer acquisition foundation from zero by March 2026, completing a mechanism that hits strongly even in AI searches.</p>
+                </div>
+                <!-- インラインスタイルを排除し、CSS設計に準拠したセマンティックなブロックへ統合 -->
+                <div class="tech-box" style="background-color: #f0fdf4; border-color: #bbf7d0;">
+                    <h4 style="color: #16a34a;">💡 Thoughts After Completing the Challenge</h4>
+                    <p>What greatly pulled up my IT skills was undoubtedly these SEO/AEO measures. In the process of multilingualization, I faced the severity of AI hallucinations (made-up stories), but conversely, by doubting and monitoring the AI, my own knowledge improved drastically.</p>
+                    <p style="margin-top: 10px;">Also, I was able to deeply learn many technologies directly connected to practical work, including JavaScript and SVG, such as implementing WebP and JPEG switching via the <code>&lt;picture&gt;</code> tag to improve display speed, and automating image adjustments by combining PowerShell and ImageMagick to **reduce manual work time by 95%**.</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="./kabu_chart_woman_cry.png" alt="Drop">
+                    <img src="./kabu_chart_woman.png" alt="Stable">
+                    <img src="./kabu_chart_woman_happy.png" alt="Rise">
+                </div>
+                <div class="evolution-point">📈 V-Shaped Recovery of Sheer Determination</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-7">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 2</span>
+                    <h2>Project ②: Transforming Mindsets in a Low-Tech Workspace</h2>
+                    <div class="subtitle">Instilled OneDrive into staff who had no concept of "information sharing," building the foundation for automation</div>
+                </div>
+                <div class="slide-text">
+                    <p>The Philippine staff are cheerful and excellent, but regarding IT knowledge, they were extremely low-tech. There were no information-sharing rules for daily tasks like "Who handled which student, and how far did they go?", meaning all operations depended entirely on specific individuals.</p>
+                    <p>Therefore, leading up to August 2025, I first built an Excel sheet on the cloud (OneDrive) that everyone could update in real time. I thoroughly drilled into them the <strong>culture and rule of "aggregating data here"</strong> to stabilize operations.</p>
+                    <p>Because I forcefully rooted the habit of "inputting data into the cloud" on-site at this time, it beautifully connected as a prelude to the later explosive back-office automation using n8n (June 2026).</p>
+                </div>
+                <div class="tech-box" style="background-color: #fffbeb; border-color: #fde68a;">
+                    <h4 style="color: #d97706;">👥 A Down-to-Earth Approach to Operational Improvement</h4>
+                    <p>Even if you introduce a system alone, the site won't move. I practiced a hands-on style of management, stepping up gradually from "sharing familiar Excel files" matched to human literacy.</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./computer_couple.png" alt="Teaching" style="max-height:220px;">
+                <div class="evolution-point">🤝 Raising the Literacy Floor</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-8">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 3</span>
+                    <h2>Project ③: Crisis Management & AI Audio Teaching Material Development</h2>
+                    <div class="subtitle">A teaching material system using JavaScript + Web Speech API born from a failure</div>
+                </div>
+                <div class="slide-text">
+                    <p>Another issue on-site was the staff's "low awareness of copyright." To prevent future legal risks caused by reproducing commercial textbooks without bad intentions, I immediately executed a total migration to open-source textbooks that can be used for business.</p>
+                    <p>Further, to produce listening materials internally, I challenged the development of an "original voice generation AI" with Copilot as my partner. Running <strong>Tacotron2</strong> and <strong>Waveglow</strong> on the Anaconda prompt, I trained it on around 500 samples to learn specific voices from YouTube and create a "fictional person's voice." However, although it was completed after overcoming errors, voice variations and detailed settings were difficult, and it resulted in unnaturalness for practical use.</p>
+                    <p>Here, I immediately changed direction! Prioritizing "practical usability that can be easily used on-site" above all else, I self-made a lightweight system that calls the <strong>Web Speech API (SpeechSynthesis)</strong> using HTML + JavaScript. Teachers just open the page on Edge, input text, and adjust settings via a pull-down menu; with a single button, they can play realistic native English audio useful for classes, completing a tool that realized a safe and rich class environment.</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <div class="img-stack">
+                    <img src="./job_programmer.png" alt="Development">
+                    <img src="./computer_screenreader_shikakusyougai.png" alt="Listening">
+                </div>
+                <div class="evolution-point">🔊 Practicality as Top Priority</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-9">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">PROJECT 4</span>
+                    <h2>Project ④: Full Automation of Inquiries & Facility Management via n8n</h2>
+                    <div class="subtitle">A workflow built in just 2 months starting from zero knowledge of "nodes" or "triggers"</div>
+                </div>
+                <div class="slide-text">
+                    <p>Thanks to the results of the blue ocean strategy, we achieved a V-shaped recovery in 2026 from the deficit management of 2025. To create a system that runs even if I leave the site, in late April 2026, I took the step to introduce the workflow automation tool "n8n." At the time, I started from a completely ignorant state.</p>
+                    <p>What I built is a system where, upon receiving an email, <strong>Gemini 3.1 Flash-lite</strong> automatically classifies the context, performs a RAG search from a vector DB (<strong>Pinecone</strong>), and creates an optimal reply draft in dozens of seconds. To maintain confidentiality, I used the pay-as-you-go API designed so that data is not used for training. Furthermore, to avoid the "overwrite bug" of spreadsheets during the automatic calculation of infrastructure maintenance costs, I implemented a unique Memory-Merge logic using JavaScript.</p>
+                    <p>Additionally, systems requiring absolute confidentiality, such as customer information management, were built securely using only JS code and functions without passing through AI. I completed this <strong>"hybrid deterministic design"</strong> that guards AI's uncertainty with robust programming in just 2 months, successfully **reducing staff operational hours by 80%**.</p>
+                </div>
+                <div class="tech-box">
+                    <h4 style="text-align:center;">⚙️ Built n8n Ecosystem</h4>
+                    <p style="text-align:center; font-weight:900; margin:0; font-size:0.95rem;">n8n Workflows ｜ Gemini 3.1 / 3.5 Flash-lite ｜ JavaScript ｜ Pinecone Vector Store ｜ Webhook ｜ ngrok</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./ai_computer_sousa_robot.png" alt="Automation" style="max-height:220px;">
+                <div class="evolution-point">🤖 A Mechanism to Run Even When Away</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-10">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">IMPLEMENTATION LOG</span>
+                    <h2>n8n Implementation Log: Results and Compromises of All 5 Plans</h2>
+                </div>
+                <div class="slide-text" style="font-size:0.92rem; line-height:1.6;">
+                    <p><strong>① Automatic Email Reply & Multilingualization (Trial, Error, and Compromise):</strong><br>
+                    Thinking "let's handle customers warmly and politely," I initially tried using only AI prompts but failed. I realized that learning from past reply samples was indispensable to write text that sounds like me, so I accumulated data into Pinecone. Because our school's fee structure is complex, the amount of data to learn became enormous. At first, following Gemini's suggestion, I split chunks into around 1000 tokens, but the information got fragmented, causing mistakes where incorrect information was combined. By changing to a method where files are read "by whole file" without cutting information, accuracy improved dramatically.<br>
+                    Also, to prevent variance in accuracy for each language, I optimized the workflow into a two-branch flow of "Japanese" vs "Non-Japanese." Since LLMs could not completely prevent mistakes in fee calculations that reach roughly 200 million combinations, I chose a "strategic compromise" where n8n outputs a "tentative" calculation, and staff do the final check by using a JavaScript simulator that I perfectly built to copy and paste. By also assigning the final adjustment of multilingualization to the LLM's strength of "translating from English," although the reduction in hours did not reach the 95% target, we secured an **80% reduction while guaranteeing "100% accuracy" in guidance**.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>② SNS DM Automation (Strategic Postponement):</strong><br>
+                    Although I went through trial and error implementing Webhooks using ngrok as a test environment, I struggled with the connection. Therefore, when I re-analyzed the data ratio of inquiries, the fact emerged that emails accounted for 90%, FB/IG/LINE for less than 10%, and other SNS for zero. To take the shortest distance to results, I judged automation as a strategic "postponement." Instead, I covered it by adding an answering flow to the already built email workflow, arranging it so that AI can instantly create response text manually as well.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>③ Simplification of Reporting Work for Staff (Result):</strong><br>
+                    Completed as expected. The unique Filipino English that staff entered following a template is automatically converted by AI into general standard English and output to a spreadsheet. Combining functions and code, I simplified complex reporting tasks, preparing an environment where local staff can report expenses without hesitation.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>④ Automation of Customer & Facility Management (Result):</strong><br>
+                    In cooperation with spreadsheets, I succeeded in automating the calculation of local fee billing amounts, reservation/room management, email address management, etc. Considering security, since it is managed using only code without using AI, information protection is also perfect.</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./job_programmer.png" alt="Log" style="max-height:220px;">
+                <div class="evolution-point">📝 Uncompromising Trial and Error</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-11">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">VALUE</span>
+                    <h2>The "One-and-Only Value" I can demonstrate at your company</h2>
+                </div>
+                <div class="slide-text">
+                    <p>My strength is not an elite educational background or deeply experienced IT knowledge. It is a <strong>strong spirit of inquiry to "acquire an ability if I don't have it," and a desire to learn that increases as I grow older</strong>.</p>
+                    <p>When I first took on call center operations, recognizing that I was a beginner, I kept my ears open to catch the responses of experienced people around me to steal their techniques, repeating simulations of how I would answer and conducting thorough research. Because I handled accurate responses and reliable complaint processing despite being inexperienced, I was evaluated by my supervisor and promoted to SV at an unusually fast pace. Furthermore, by producing results as an SV in Tokyo, I rose to become the <strong>Managing SV overlooking both the Tokyo and Osaka branches</strong>.</p>
+                    <p>Rather than maintaining a changeless routine, I prefer "improvement" and "efficiency optimization," and an entrepreneurial spirit where I can move proactively lies at my foundation.</p>
+                    <p>Compared to other candidates who have built careers in the same industry, there may be parts where my current acquired knowledge and skills are inferior. However, I am certain that my **overwhelming ability to take action and desire to learn** enough to overturn that in a short period is my one-and-only value.</p>
+                </div>
+                <div class="tech-box" style="background-color:#d1fae5; border-color:#a7f3d0;">
+                    <h4 style="color:#16a34a; text-align:center;">📩 Please reach out anytime</h4>
+                    <p style="font-weight:bold; margin:0; text-align:center; color:#065f46;">Thank you for watching. I look forward to meeting you at the next step of the interview.</p>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./job_english_tsuuyaku.png" alt="Bow" style="max-height:220px;">
+                <div class="evolution-point" style="background:var(--success-green);">✉️ Let's meet at the interview!</div>
+            </aside>
+        </section>
+
+        <section class="slide" id="slide-12">
+            <div class="slide-body">
+                <div class="slide-header">
+                    <span class="slide-tag">BONUS</span>
+                    <h2>Other "Physical & On-site Solution" Achievements usually not written on a resume</h2>
+                </div>
+                <div class="slide-text">
+                    <p style="font-weight:800; color:var(--primary-dark); margin-bottom:5px;">🛠️ &lt;DIY&gt; Physical infrastructure renovation at the Philippine school</p>
+                    <ul style="padding-left:20px; margin-bottom:20px; font-size:0.92rem; line-height:1.6;">
+                        <li>Constructed a bridge over the ditch between the school grounds and the road through civil work together with staff (City permit acquired; it has been 8 years and is still used strongly without any problems)</li>
+                        <li>Minor expansion of water pipes</li>
+                        <li>Replacement of damaged outlets (wall sockets)</li>
+                        <li>Repair of electrical switch circuit failures (defective construction by locals)</li>
+                    </ul>
+                    
+                    <p style="font-weight:800; color:var(--accent-orange); margin-bottom:5px;">💻 &lt;Hardware / Network Systems&gt;</p>
+                    <ul style="padding-left:20px; font-size:0.92rem; line-height:1.6;">
+                        <li>Installation and management of CCTV cameras using an NVR (Network Video Recorder)</li>
+                        <li>Total replacement and re-installation of embedded Ethernet cables in the ceiling that were severed due to rat damage</li>
+                        <li>Disassembled old unusable PCs to take out hard disk drives (HDDs), reusing them as external hard disks or for new NVRs without HDDs</li>
+                    </ul>
+                </div>
+            </div>
+            <aside class="slide-sidebar">
+                <img src="./computer_jisaku_bunkai.png" alt="DIY" style="max-height:220px;">
+                <div class="evolution-point" style="background:var(--secondary); color:white;">🔧 Survival abilities fully equipped!</div>
+            </aside>
+        </section>
+
+        <!-- コントロールボタン -->
+        <nav class="controls">
+            <button class="btn" id="prevBtn" onclick="prevSlide()">Back</button>
+            <div class="progress-dots" id="dot-container"></div>
+            <button class="btn" id="nextBtn" onclick="nextSlide()">Next</button>
+        </nav>
+
+    </main>
+
+    <script>
+        let currentIdx = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dotContainer = document.getElementById('dot-container');
+        
+        // コミックデータの画像パスも相対パス（./）に最適化
+        const mangaData = [
+            { src: './ore-p1.jpg', text: '【Episode 1】We were in the Philippines!!' },
+            { src: './ore-p2.jpg', text: '"Kyaaa!" 【A piercing, high-pitched shriek】 "Huh?"' },
+            { src: './ore-p3.jpg', text: '"Whoa, whoa, whoa..." 【Total disbelief】 【Narration: At that moment, I was...】' },
+            { src: './ore-p4.jpg', text: '【Narration: ...in the Philippines!!】 "Turns out, it was just a pig squealing." "Are you serious?!"' },
+            { src: './ore-p5.jpg', text: 'We were in the Phili... "Ouch-ch-ch-ch! (Wait, \'Ita\' means pain, but we were \'Ita\' in the Philippines?!)"' }
+        ];
+        let mangaIdx = 0;
+        let mangaTimer = null;
+
+        // ドットの生成
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        });
+
+        function updateUI() {
+            slides.forEach((s, i) => {
+                if (window.innerWidth <= 950) {
+                    s.style.display = (i === currentIdx) ? 'grid' : 'none';
+                } else {
+                    s.style.display = ''; // デスク環境ではCSSの指定を優先
+                }
+                s.classList.toggle('active', i === currentIdx);
+            });
+
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentIdx);
+            });
+
+            document.getElementById('prevBtn').disabled = (currentIdx === 0);
+            document.getElementById('nextBtn').disabled = (currentIdx === slides.length - 1);
+
+            if (currentIdx === 5) {
+                startMangaTimer();
+            } else {
+                stopMangaTimer();
+            }
+        }
+
+        function nextSlide() {
+            if (currentIdx < slides.length - 1) {
+                currentIdx++;
+                updateUI();
+            }
+        }
+
+        function prevSlide() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                updateUI();
+            }
+        }
+
+        function goToSlide(idx) {
+            currentIdx = idx;
+            updateUI();
+        }
+
+        function startMangaTimer() {
+            if (mangaTimer) clearInterval(mangaTimer);
+            updateManga();
+            mangaTimer = setInterval(() => {
+                mangaIdx = (mangaIdx + 1) % mangaData.length;
+                updateManga();
+            }, 5000);
+        }
+
+        function stopMangaTimer() {
+            if (mangaTimer) {
+                clearInterval(mangaTimer);
+                mangaTimer = null;
+            }
+        }
+
+        function nextManga() {
+            mangaIdx = (mangaIdx + 1) % mangaData.length;
+            updateManga();
+            if (currentIdx === 5) startMangaTimer();
+        }
+
+        function updateManga() {
+            const img = document.getElementById('manga-img');
+            const cap = document.getElementById('manga-cap');
+            if (img && cap) {
+                img.src = mangaData[mangaIdx].src;
+                cap.innerText = mangaData[mangaIdx].text;
+            }
+        }
+
+        window.addEventListener('resize', updateUI);
+        window.addEventListener('DOMContentLoaded', updateUI);
+    </script>
+</body>
+</html>
