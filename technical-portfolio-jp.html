@@ -35,11 +35,34 @@
         }
 
         header {
+            position: relative;
             text-align: center;
             padding: 60px 0 40px 0;
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 40px;
+        }
+
+        /* 【追加】言語切り替え用リンクのスタイリング */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+        }
+        .lang-switch-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+        .lang-switch-link:hover {
+            color: #ffffff;
+            border-color: var(--accent-color);
+            background-color: rgba(16, 185, 129, 0.1);
         }
 
         header h1 {
@@ -56,7 +79,6 @@
             margin: 0 auto;
         }
 
-        /* 【追加】カジュアル版への誘導リンク用スタイリング：デザインを壊さない洗練されたボタン */
         .casual-switch-banner {
             background-color: rgba(16, 185, 129, 0.05);
             border: 1px solid rgba(16, 185, 129, 0.2);
@@ -99,6 +121,11 @@
             }
             .casual-switch-text {
                 text-align: center;
+            }
+            .lang-switch {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
             }
         }
 
@@ -244,6 +271,10 @@
 <body>
 
     <header>
+        <div class="lang-switch">
+            <a href="technical-portfolio.html" class="lang-switch-link">🌐 English Edition</a>
+        </div>
+
         <div class="container" style="padding: 0;">
             <h1>AI駆動型バックエンド自動化インフラストラクチャ</h1>
             <p>n8n、JavaScript、および多層RAGパイプラインによる、エンタープライズグレードの「ハルシネーション・ゼロ」業務設計</p>
@@ -256,7 +287,7 @@
             <div class="badge-container" style="margin-top: 10px;">
                 <span class="badge badge-tech">n8n Enterprise</span>
                 <span class="badge badge-tech">Node.js v20 LTS</span>
-                <span class="badge badge-tech">Gemini 2.0 / 1.5 Flash</span>
+                <span class="badge badge-tech">Gemini 3.1 Flash-Lite</span>
                 <span class="badge badge-tech">Pinecone Vector Store</span>
                 <span class="badge badge-tech">JavaScript (ES6+)</span>
                 <span class="badge badge-tech">Google Cloud API Platform</span>
@@ -270,7 +301,7 @@
             <p class="casual-switch-text">
                 💡 <strong>採用担当者様へ:</strong> このシステムが構築されるまでの背景や、現場の課題解決ストーリーをポップなスライド形式（日本語）で読みたい場合は、カジュアル版をご覧ください。
             </p>
-            <a href="portfolio-jp.html" class="casual-switch-btn">📊 ストーリー版を見る</a>
+            <a href="portfolio-jp.html" target="_blank" class="casual-switch-btn">📊 ストーリー版を見る</a>
         </div>
 
         <div class="section">
@@ -310,7 +341,7 @@
             <p>
                 初期検証においてNode.js v25を採用した際、非LTSリリースのV8 API変更に伴い、ネイティブコード実行モジュールである<code>isolated-vm</code>ライブラリのビルドエラーが発生。これにより、ワークフロー環境内での安全なスクリプト実行層が停止するリスクが生じました。この課題に対し、実行環境を隔離されたAnaconda環境内の**Node.js v20 LTS**へとダウングレードすることで依存関係を完全に解決し、長期的な環境の安定性を確保しました。
             </p>
-pre><code># プロセス隔離のための仮想環境構築
+<pre><code># プロセス隔離のための仮想環境構築
 conda create -n n8n_env nodejs=20 -c conda-forge
 conda activate n8n_env
 
@@ -357,7 +388,7 @@ n8n start --tunnel</code></pre>
             <div class="insight-box">
                 <h4>💡 技術的インサイト：確率 (Probability) vs 決定論 (Determinism)</h4>
                 <p>
-                    どれほど厳格にFew-Shotプロンプトやシステム指示を構築しても、確率論的に動作する言語モデル（Gemini 2.0 Flashなど）には、多段階の数学的計算においてトークンの揺らぎやハルシネーション（嘘の生成）のリスクが常に伴います。商業運用の世界において、1セントの請求エラーであっても顧客の信頼を失い、法的なリスクを招きます。
+                    どれほど厳格にFew-Shotプロンプトやシステム指示を構築しても、確率論的に動作する言語モデル（Gemini 3.1 Flash-Liteなど）には、多段階の数学的計算においてトークンの揺らぎやハルシネーション（嘘の生成）のリスクが常に伴います。商業運用の世界において、1セントの請求エラーであっても顧客の信頼を失い、法的なリスクを招きます。
                 </p>
                 <p>
                     <strong>解決策：</strong> システム全体の「関心の分離」を行いました。LLMは文脈の理解、分類、トーンの調整（確率的なタスク）にのみ使用。一方で、すべての定量的な計算処理は隔離されたJavaScript実行ブロック（決定論的なタスク）へ強制的にバイパスさせ、100%の計算精度を担保する構造に設計しました。
@@ -380,7 +411,7 @@ n8n start --tunnel</code></pre>
             <div style="display: flex; flex-direction: column; max-width: 650px; margin: 20px auto;">
                 <div class="flow-step"><strong>1. 定期インジェクション層:</strong> Gmail API経由で未読のトランザクションインテントをポーリング。</div>
                 <div class="flow-arrow">⬇️</div>
-                <div class="flow-step"><strong>2. 文脈 & 言語分類:</strong> Gemini 2.0 Flashがメタデータを抽出し、構造化されたJSONへ変換。</div>
+                <div class="flow-step"><strong>2. 文脈 & 言語分類:</strong> Gemini 3.1 Flash-Liteがメタデータを抽出し、構造化されたJSONへ変換。</div>
                 <div class="flow-arrow">⬇️</div>
                 <div class="flow-step"><strong>3. JavaScript防御パース層:</strong> Markdownの不要な記号を剥ぎ取り、オブジェクトトークンをサニタイズ。</div>
                 <div class="flow-arrow">⬇️</div>
@@ -442,7 +473,7 @@ return { json: finalPayload };</code></pre>
 
             <h3>Regex（正規表現）ファーストのトークンパース戦略</h3>
             <p>
-                明示的なパターンに対してハルシネーション率を0%に抑えるため、インジェクション層では特定の文字列抽出にLLMを使用しません。JavaScript実行ノード内の高速な正規表現エンジンを利用し、一意のトランザクションキー（多部構成の識別子など）を完全に決定論的に抽出した上で、全体的なテキストを**Gemini 2.0 Flash**へ渡し、セマンティックな文脈分類を行っています。
+                暗黙的なパターンに対してハルシネーション率を0%に抑えるため、インジェクション層では特定の文字列抽出にLLMを使用しません。JavaScript実行ノード内の高速な正規表現エンジンを利用し、一意のトランザクションキー（多部構成の識別子など）を完全に決定論的に抽出した上で、全体的なテキストを**Gemini 3.1 Flash-Lite**へ渡し、セマンティックな文脈分類を行っています。
             </p>
 
             <h3>コードレベルのエグゼキューションコンテキスト</h3>
@@ -465,7 +496,7 @@ function sanitizeJsonString(rawString) {
 
 let rawOutput = "";
 try {
-    // 上流のGemini 2.0 Flashエージェントから応答トークンをインジェスト
+    // 上流のGemini 3.1 Flash-Liteエージェントから応答トークンをインジェスト
     rawOutput = $input.all()[0].json.choices[0].message.content;
 } catch (e) {
     // スキーマ構造に致命的な問題がある場合のフォールバック
@@ -553,7 +584,7 @@ return { json: operationalPayload };</code></pre>
 
             <h3>AIエージェントの無限ループ危機</h3>
             <p>
-                初期の設計では、n8nのネイティブ機能である**AI Agentノード**に動的なツールコール（Tool Calling）とベクトルメモリバッファを組み合わせた設計を試みました。しかし、本番環境のトランザクション量が増加するにつれ、エージェント型アーキテクチャの深刻な不安定性が露呈しました。多言語入力において会話状態の管理ミスが多発し、ツール呼び出しの無限ループに陥ることで、APIコストの暴騰と致命的なレイテンシーの悪化を引き起こしました。
+                初期設計では、n8nのネイティブ機能である**AI Agentノード**に動的なツールコール（Tool Calling）とベクトルメモリバッファを組み合わせた設計を試みました。しかし、本番環境のトランザクション量が増加するにつれ、エージェント型アーキテクチャの深刻な不安定性が露呈しました。多言語入力において会話状態の管理ミスが多発し、ツール呼び出しの無限ループに陥ることで、APIコストの暴騰と致命的なレイテンシーの悪化を引き起こしました。
             </p>
 
             <h3>高可用性に向けた現実的なリファクタリング</h3>
