@@ -17,8 +17,6 @@
             --card-bg: #111827;
             --border-color: #374151;
             --warning-color: #f59e0b;
-            --lang-btn-bg: #334155;
-            --lang-btn-hover: #475569;
         }
 
         body {
@@ -37,11 +35,34 @@
         }
 
         header {
+            position: relative;
             text-align: center;
             padding: 60px 0 40px 0;
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 40px;
+        }
+
+        /* 日本語版の配置・スタイリングと完全に統一 */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+        }
+        .lang-switch-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+        .lang-switch-link:hover {
+            color: #ffffff;
+            border-color: var(--accent-color);
+            background-color: rgba(16, 185, 129, 0.1);
         }
 
         header h1 {
@@ -80,67 +101,36 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Language Switcher Styling */
-        .language-switcher {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
-        }
-
-        .lang-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--lang-btn-bg);
-            color: #ffffff !important;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease;
-            border: 1px solid var(--border-color);
-        }
-
-        .lang-btn:hover {
-            background-color: var(--lang-btn-hover);
-        }
-
-        /* カジュアル版移行バナーのスタイリング */
         .casual-switch-banner {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-left: 4px solid var(--accent-color);
+            background-color: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 35px;
+            padding: 15px 20px;
+            margin: -20px auto 30px auto;
+            max-width: 800px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            align-items: center;
+            gap: 15px;
         }
-
         .casual-switch-text {
-            margin: 0;
-            color: #cbd5e1;
             font-size: 0.95rem;
-            line-height: 1.5;
+            color: var(--text-muted);
+            text-align: left;
+            margin: 0;
         }
-
         .casual-switch-btn {
             display: inline-block;
-            white-space: nowrap;
             background-color: var(--accent-color);
-            color: #ffffff !important;
-            font-weight: bold;
+            color: var(--secondary-color);
+            font-weight: 700;
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 6px;
+            font-size: 0.9rem;
+            white-space: nowrap;
             transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
         .casual-switch-btn:hover {
             background-color: var(--accent-hover);
             transform: translateY(-1px);
@@ -149,16 +139,15 @@
         @media (max-width: 768px) {
             .casual-switch-banner {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            .casual-switch-btn {
-                width: 100%;
                 text-align: center;
-                box-sizing: border-box;
             }
-            .language-switcher {
-                justify-content: center;
+            .casual-switch-text {
+                text-align: center;
+            }
+            .lang-switch {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
             }
         }
 
@@ -218,7 +207,7 @@
             padding: 0;
             border: none;
             color: inherit;
-            }
+        }
 
         ul, ol {
             padding-left: 20px;
@@ -282,6 +271,10 @@
 <body>
 
     <header>
+        <div class="lang-switch">
+            <a href="https://kikuyan55.github.io/portfolio/technical-portfolio-jp.html" class="lang-switch-link">🌐 日本語版</a>
+        </div>
+
         <div class="container" style="padding: 0;">
             <h1>AI-Driven Backend Automation Infrastructure</h1>
             <p>Architecting Enterprise-Grade, Zero-Hallucination Operations via n8n, JavaScript, and Multi-Layer RAG Pipelines</p>
@@ -303,12 +296,6 @@
     </header>
 
     <div class="container">
-
-        <div class="language-switcher">
-            <a href="portfolio-jp.html" class="lang-btn">
-                🇯🇵 Switch to Japanese (日本語)
-            </a>
-        </div>
 
         <div class="casual-switch-banner">
             <p class="casual-switch-text">
